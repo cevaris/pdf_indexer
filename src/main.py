@@ -1,4 +1,5 @@
 import argparse
+import re
 
 import extract
 
@@ -10,8 +11,24 @@ def index(args):
 
 
 def uniq_words(args):
+  strip_chars_regex = re.compile('[\[\](){}<>:.,“"…]')
+  words = set({})
   pages = extract.pages(args.pdf)
-  print('got here', len(pages))
+
+  for page in pages:
+    raw = page.text
+    clean = strip_chars_regex.sub(' ', raw.lower())
+
+    for c in clean.split(' '):
+      if len(c) > 0:
+        words.add(c)
+
+  # sort words
+  words = sorted([*words, ])
+  words = list(filter(lambda w: w.isalpha(), words))
+
+  for w in words:
+    print(w)
 
 
 parser = argparse.ArgumentParser()

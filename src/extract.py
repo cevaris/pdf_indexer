@@ -1,11 +1,9 @@
-import threading
+import multiprocessing
+import sys
 from concurrent import futures
 from functools import partial
 
 from pdfreader import PageDoesNotExist, SimplePDFViewer
-
-
-viewer_lock = threading.Lock()
 
 
 class Page(object):
@@ -15,13 +13,14 @@ class Page(object):
 
 
 def pages(filepath):
-  page_count = 10 # calculate_page_count(filepath)
+  page_count = calculate_page_count(filepath)
   print('found {} pages'.format(page_count))
 
-  tp = futures.ThreadPoolExecutor(max_workers=10)
+  thread_count = multiprocessing.cpu_count() - 1
+  tp = futures.ThreadPoolExecutor(max_workers=thread_count)
   with tp as executor:
     viewer_render = partial(page_extractor, filepath)
-    return list(executor.map(viewer_render, range(1, page_count + 1)))
+    return list(executor.map(viewer_render, range(1, page_count)))
 
 
 def calculate_page_count(filepath):
@@ -44,7 +43,8 @@ def page_extractor(filepath, page_number):
     viewer.render()
     content = viewer.canvas.strings
 
-    content = content[3:] # remove page number
+    content = content[3:]  # remove page number
 
     text = ''.join(content)
+    print('extracted page {}'.format(page_number), file=sys.stderr)
     return Page(page_number, text)

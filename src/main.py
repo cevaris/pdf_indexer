@@ -1,23 +1,32 @@
 import argparse
-import re
+import collections
 
 import extract
+from classes import Index
+from indexer import clean_text, page_words
 
 
 def index(args):
   pages = extract.pages(args.pdf)
+  index = Index()
+
   for page in pages:
-    print('Page# {}:\n{}'.format(page.page_number, page.text))
+    words = page_words(page)
+
+    for w in words:
+      index.add(w, page.page_number)
+
+  sorted_index = collections.OrderedDict(sorted(index))
+  for term, pages in sorted_index.items():
+    print('{} - {}'.format(term, ','.join(map(str, pages))))
 
 
 def uniq_words(args):
-  strip_chars_regex = re.compile('[\[\](){}<>:.,“"…]')
   words = set({})
   pages = extract.pages(args.pdf)
 
   for page in pages:
-    raw = page.text
-    clean = strip_chars_regex.sub(' ', raw.lower())
+    clean = clean_text(page.text)
 
     for c in clean.split(' '):
       if len(c) > 0:

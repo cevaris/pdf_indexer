@@ -5,15 +5,11 @@ from functools import partial
 
 from pdfreader import PageDoesNotExist, SimplePDFViewer
 
-
-class Page(object):
-  def __init__(self, page_number, text):
-    self.page_number = page_number
-    self.text = text
+from classes import Page
 
 
 def pages(filepath):
-  page_count = calculate_page_count(filepath)
+  page_count = 5  # calculate_page_count(filepath)
   print('found {} pages'.format(page_count))
 
   thread_count = multiprocessing.cpu_count() - 1

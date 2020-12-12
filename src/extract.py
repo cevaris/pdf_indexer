@@ -21,7 +21,7 @@ def pages(filepath):
   tp = futures.ThreadPoolExecutor(max_workers=10)
   with tp as executor:
     viewer_render = partial(page_extractor, filepath)
-    return executor.map(viewer_render, range(1, page_count + 1))
+    return list(executor.map(viewer_render, range(1, page_count + 1)))
 
 
 def calculate_page_count(filepath):

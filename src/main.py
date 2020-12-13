@@ -6,7 +6,7 @@ from classes import Index
 from indexer import clean_text, page_words
 
 
-def index(args):
+def func_index(args):
   pages = extract.pages(args.pdf)
   index = Index()
 
@@ -21,7 +21,7 @@ def index(args):
     print('{} - {}'.format(term, ','.join(map(str, pages))))
 
 
-def uniq_words(args):
+def func_uniq_words(args):
   words = set({})
   pages = extract.pages(args.pdf)
 
@@ -46,11 +46,11 @@ subparsers = parser.add_subparsers()
 index_parser = subparsers.add_parser('index', description='Create pdf index.')
 index_parser.add_argument('--pdf', required=True, help="filepath to pdf")
 index_parser.add_argument('--ignore', help="filepath to file containing words to ignore")
-index_parser.set_defaults(func=index)
+index_parser.set_defaults(func=func_index)
 
 uniq_words_parser = subparsers.add_parser('uniq_words', description='Extract all unique words.')
 uniq_words_parser.add_argument('--pdf', required=True, help="filepath to pdf")
-uniq_words_parser.set_defaults(func=uniq_words)
+uniq_words_parser.set_defaults(func=func_uniq_words)
 
 args = parser.parse_args()
 args.func(args)

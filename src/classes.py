@@ -8,7 +8,7 @@ class Index(object):
   def __init__(self):
     self.store = {}
 
-  def add(self, term, page_number):
+  def add(self, term: str, page_number):
     if term not in self.store:
       self.store[term] = set([page_number])
     else:
@@ -17,7 +17,7 @@ class Index(object):
       self.store[term] = pages
 
   def __iter__(self):
-    return iter(self.store.items())
+    return iter(self.store)
 
 
 

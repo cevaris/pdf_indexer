@@ -9,11 +9,10 @@ from classes import Page
 
 
 def pages(filepath):
-    # page_count = 10
+    # page_count = 20
     page_count = calculate_page_count(filepath)
-    print('found {} pages'.format(page_count))
+    # print('found {} pages'.format(page_count))
 
-    curr_page = 1
     viewer_render = partial(page_extractor, filepath)
     return list(map(viewer_render, range(1, page_count)))
 

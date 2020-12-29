@@ -44,7 +44,7 @@ def func_uniq_words(args):
 
     annotations = list(filter(lambda x: any(char.isdigit() for char in x), matches))
     annotations = list(filter(lambda x: any(char.isupper() for char in x), annotations))
-    sorted(set(annotations))
+    # sorted(set(annotations))
     
     for a in annotations:
         print(a)
